@@ -23,6 +23,7 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Valiton\Payum\Payone\Api;
+use Valiton\Payum\Payone\Request\Api\GetBankAccountData;
 use Valiton\Payum\Payone\Request\Api\GetPseudoCardPan;
 use Valiton\Payum\Payone\Request\Api\GetSepaMandate;
 
@@ -99,6 +100,7 @@ abstract class AbstractPurchaseAction extends GatewayAwareAction implements Gene
         }
 
         if (Api::PAYMENT_METHOD_DIRECT_DEBIT_SEPA === $model[Api::FIELD_PAYMENT_METHOD]) {
+            $this->gateway->execute($bankAccount = new GetBankAccountData($model));
             $this->gateway->execute($mandate = new GetSepaMandate($model));
         }
         if (Api::PAYMENT_METHOD_CREDIT_CARD_PPAN === $model[Api::FIELD_PAYMENT_METHOD]) {
